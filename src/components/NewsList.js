@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, Text, TouchableOpacity, View, Alert} from 'react-native';
+import {FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {showInterstitialAd, showRewardedAd} from '../ads/AdManager';
 
 const news = Array.from({length: 10}, (_, i) => ({
