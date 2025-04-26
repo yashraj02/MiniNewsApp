@@ -1,11 +1,11 @@
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
-import NewsList from './components/NewsList';
-import AdBanner from './components/AdBanner';
-import {GoogleMobileAds} from 'react-native-google-mobile-ads';
-import {loadInterstitialAd, loadRewardedAd} from './ads/AdManager';
+import NewsList from './src/components/NewsList';
+import AdBanner from './src/components/AdBanner';
+import mobileAds from 'react-native-google-mobile-ads';
+import {loadInterstitialAd, loadRewardedAd} from './src/ads/AdManager';
 
-GoogleMobileAds()
+mobileAds()
   .initialize()
   .then(() => {
     loadInterstitialAd();
