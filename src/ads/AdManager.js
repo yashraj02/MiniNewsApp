@@ -1,5 +1,6 @@
 import {
   InterstitialAd,
+  AdEventType,
   RewardedAd,
   RewardedAdEventType,
   TestIds,
@@ -8,9 +9,14 @@ import {
 let interstitialAd = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL);
 let rewardedAd = RewardedAd.createForAdRequest(TestIds.REWARDED);
 
+let onAdClosedCallback = null;
+
 export const loadInterstitialAd = () => {
   interstitialAd.load();
-  console.log('Interstitial loaded');
+};
+
+export const loadRewardedAd = () => {
+  rewardedAd.load();
 };
 
 export const showInterstitialAd = () => {
@@ -18,15 +24,8 @@ export const showInterstitialAd = () => {
     interstitialAd.show();
   } else {
     console.log('Interstitial not ready yet');
+    interstitialAd.load(); // reload if not ready
   }
-};
-
-export const loadRewardedAd = () => {
-  rewardedAd.load();
-  console.log('Rewarded loaded');
-  rewardedAd.addEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
-    console.log('User earned reward of ', reward.amount);
-  });
 };
 
 export const showRewardedAd = () => {
@@ -34,5 +33,28 @@ export const showRewardedAd = () => {
     rewardedAd.show();
   } else {
     console.log('Rewarded ad not ready');
+    rewardedAd.load();
   }
+};
+
+export const setOnAdClosed = callback => {
+  onAdClosedCallback = callback;
+
+  interstitialAd.addAdEventListener(AdEventType.CLOSED, () => {
+    interstitialAd.load();
+    if (onAdClosedCallback) {
+      onAdClosedCallback();
+    }
+  });
+
+  rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
+    rewardedAd.load();
+    if (onAdClosedCallback) {
+      onAdClosedCallback();
+    }
+  });
+
+  rewardedAd.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
+    console.log('User earned reward of ', reward.amount);
+  });
 };
